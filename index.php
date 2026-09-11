@@ -6,12 +6,11 @@
     hello();
     hello();
 
-    function square(5a) {
-        if ($a<0){
-            retunr 0;
+    function square($a) {
+        if ($a < 0) {
+            return 0;
         }
         return $a * $a;
-        var_dump('asdasdads')
     }
 
     $answer = square(4);
