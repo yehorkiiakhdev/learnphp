@@ -1,20 +1,30 @@
 <?php
-    function hello() {
-        var_dump("Hello!");
+
+class Box {
+
+    public static $count;
+
+    public function __construct(public int $width, private int $height, protected int $length) {
+
     }
 
-    hello();
-    hello();
-
-    function square($a) {
-        if ($a < 0) {
-            return 0;
-        }
-        return $a * $a;
+    public function volume() {
+        
+        return $this->width * $this->height * $this->length;
     }
 
-    $answer = square(4);
-    var_dump($answer);
-    var_dump(square(5));
+    public static function test() {
+        var_dump(self::$count);
+        var_dump(self::class);
+        var_dump(static::class);
+    }
+}
 
-?>
+class MetalBox extends Box {
+
+}
+
+Box::$count = 1;
+Box::$count = 2;
+MetalBox::test();
+var_dump(Box::$count, Box::$count);
