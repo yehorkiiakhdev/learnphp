@@ -9,14 +9,18 @@ class DB {
     private $conn;
 
     public function __construct() {
-        $servername = "localhost:33061";
+        $servername = "127.0.0.1";
+        $port = 33061;
         $username = "root";
         $password = "example";
         $dbname = "project";
         
         try {
-            $this->conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-            // set the PDO error mode to exception
+            $this->conn = new PDO(
+                "mysql:host=$servername;port=$port;dbname=$dbname;charset=utf8mb4",
+                $username,
+                $password
+            );
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             
             echo "Connected successfully";
@@ -37,6 +41,20 @@ class DB {
         $result = $this->conn->query($sql);
         $result->setFetchMode(PDO::FETCH_CLASS, $class);
         return $result->fetch();
+    }
+    public function insert($table, $fields) {
+        $columns = implode(', ', array_keys($fields));
+        $placeholders = ':' . implode(', :', array_keys($fields));
+
+        $sql = "INSERT INTO $table ($columns) VALUES ($placeholders)";
+
+        $stmt = $this->conn->prepare($sql);
+
+        foreach ($fields as $name => $value) {
+            $stmt->bindValue(":$name", $value);
+        }
+
+        $stmt->execute();
     }
 
     public function update($table, $fields, $id) {
